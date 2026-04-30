@@ -18,14 +18,154 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:120px;overscroll-behavior:none}
 
+/* ── FOND PHOTO ── */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  padding-bottom: 120px;
+  overscroll-behavior: none;
+  position: relative;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('photo.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  opacity: 0.13;
+  z-index: 0;
+  pointer-events: none;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(12,15,26,0.7) 0%, rgba(12,15,26,0.5) 40%, rgba(12,15,26,0.85) 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+body > * { position: relative; z-index: 1; }
+
+/* ── PIN SCREEN ── */
+.pin-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(12,15,26,0.92);
+  backdrop-filter: blur(20px);
+}
+.pin-screen.hidden { display: none; }
+
+.pin-card {
+  width: 100%;
+  max-width: 340px;
+  text-align: center;
+}
+.pin-photo {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  background-image: url('photo.jpg');
+  background-size: cover;
+  background-position: center top;
+  margin: 0 auto 16px;
+  border: 3px solid rgba(123,156,255,0.4);
+  box-shadow: 0 0 30px rgba(123,156,255,0.2);
+}
+.pin-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem;
+  background: linear-gradient(120deg, #e8ecf8, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+.pin-sub {
+  font-size: 0.75rem;
+  color: var(--text3);
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 28px;
+}
+.pin-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.pin-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--surface3);
+  border: 2px solid var(--border);
+  transition: all 0.2s;
+}
+.pin-dot.filled {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(123,156,255,0.5);
+}
+.pin-dot.error {
+  background: var(--red);
+  border-color: var(--red);
+  animation: shake 0.4s ease;
+}
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-6px)}
+  40%{transform:translateX(6px)}
+  60%{transform:translateX(-4px)}
+  80%{transform:translateX(4px)}
+}
+.pin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: 260px;
+  margin: 0 auto;
+}
+.pin-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'DM Mono', monospace;
+  user-select: none;
+}
+.pin-btn:active { background: var(--surface3); transform: scale(0.94); border-color: var(--accent); }
+.pin-btn.zero { grid-column: 2; }
+.pin-btn.del  { background: transparent; border-color: transparent; color: var(--text3); font-size: 1rem; }
+.pin-btn.del:active { background: rgba(255,107,107,0.1); color: var(--red); }
+.pin-error-msg {
+  margin-top: 14px;
+  font-size: 0.75rem;
+  color: var(--red);
+  font-family: 'DM Mono', monospace;
+  min-height: 18px;
+  transition: opacity 0.3s;
+}
+
+/* ── SYNC BAR ── */
 .sync-bar{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:200}
 .sync-bar.syncing{background:linear-gradient(90deg,var(--accent),var(--green),var(--accent));background-size:200%;animation:syncA 1s linear infinite}
 .sync-bar.ok{background:var(--green)}
 @keyframes syncA{0%{background-position:0%}100%{background-position:200%}}
 
-header{background:linear-gradient(160deg,#16203a 0%,#0c0f1a 100%);border-bottom:1px solid var(--border);padding:28px 20px 0;text-align:center;position:sticky;top:0;z-index:50}
+/* ── HEADER ── */
+header{background:linear-gradient(160deg,rgba(22,32,58,0.95) 0%,rgba(12,15,26,0.95) 100%);border-bottom:1px solid var(--border);padding:28px 20px 0;text-align:center;position:sticky;top:0;z-index:50;backdrop-filter:blur(10px)}
 .header-title{font-family:'DM Serif Display',serif;font-size:1.6rem;background:linear-gradient(120deg,#e8ecf8,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .header-meta{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:5px;padding-bottom:12px}
 .header-date{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--text3);letter-spacing:.1em}
@@ -34,16 +174,17 @@ header{background:linear-gradient(160deg,#16203a 0%,#0c0f1a 100%);border-bottom:
 .sync-dot.syncing{background:var(--yellow);animation:pulse .8s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .sync-label{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--text3)}
+.btn-lock-screen{background:transparent;border:none;color:var(--text3);font-size:1rem;cursor:pointer;padding:2px 6px;border-radius:6px;transition:color .2s}
+.btn-lock-screen:hover{color:var(--accent)}
 
 .nav-tabs{display:flex;border-top:1px solid var(--border)}
 .nav-tab{flex:1;text-align:center;padding:10px 0 9px;font-size:.78rem;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;font-family:'DM Mono',monospace;letter-spacing:.04em}
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-.page{display:none}
-.page.active{display:block}
+.page{display:none}.page.active{display:block}
 
-/* RAV */
-.rav-hero{margin:16px 14px 0;background:linear-gradient(135deg,#162050 0%,#0e1428 100%);border:1px solid rgba(123,156,255,.25);border-radius:var(--r);padding:22px 20px 18px;position:relative;overflow:hidden}
+/* ── RAV ── */
+.rav-hero{margin:16px 14px 0;background:linear-gradient(135deg,rgba(22,32,80,0.85) 0%,rgba(14,20,40,0.85) 100%);border:1px solid rgba(123,156,255,.25);border-radius:var(--r);padding:22px 20px 18px;position:relative;overflow:hidden;backdrop-filter:blur(8px)}
 .rav-hero::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:radial-gradient(circle,rgba(123,156,255,.12) 0%,transparent 70%);pointer-events:none}
 .rav-label{font-size:.65rem;font-family:'DM Mono',monospace;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
 .rav-amount{font-family:'DM Serif Display',serif;font-size:clamp(2.4rem,10vw,3.2rem);line-height:1;letter-spacing:-.02em;transition:color .5s}
@@ -54,9 +195,9 @@ header{background:linear-gradient(160deg,#16203a 0%,#0c0f1a 100%);border-bottom:
 .rav-pill-label{font-size:.56rem;color:var(--text3);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
 .rav-pill-val{font-size:.83rem;font-weight:600;margin-top:3px}
 
-/* CARDS */
+/* ── CARDS ── */
 .sections{padding:12px 14px;display:flex;flex-direction:column;gap:10px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .2s}
+.card{background:rgba(19,23,42,0.88);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .2s;backdrop-filter:blur(6px)}
 .card:hover{border-color:#2e3660}
 .card-head{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;user-select:none}
 .card-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.05rem;flex-shrink:0}
@@ -67,7 +208,7 @@ header{background:linear-gradient(160deg,#16203a 0%,#0c0f1a 100%);border-bottom:
 .card-body{padding:0 12px 12px}
 .card-sep{height:1px;background:var(--border);margin-bottom:10px}
 
-/* ROWS */
+/* ── ROWS ── */
 .row{display:flex;align-items:center;gap:6px;padding:6px 4px;border-radius:8px;transition:background .15s}
 .row:hover{background:rgba(255,255,255,.025)}.row:hover .row-del{opacity:1}
 .row.off .row-label,.row.off .row-amount{opacity:.4}
@@ -77,19 +218,15 @@ header{background:linear-gradient(160deg,#16203a 0%,#0c0f1a 100%);border-bottom:
 .row-amount{font-family:'DM Mono',monospace;font-size:.83rem;font-weight:500;color:var(--text);background:transparent;border:none;outline:none;text-align:right;width:68px;padding:3px 5px;border-radius:6px;transition:background .15s,color .15s}
 .row-amount:focus{background:var(--surface3);color:var(--accent)}.row-amount:disabled{color:var(--text3);cursor:not-allowed}
 .row-eur{font-size:.68rem;color:var(--text3);font-family:'DM Mono',monospace;flex-shrink:0}
-
-/* TOGGLE */
 .toggle-onoff{position:relative;width:36px;height:20px;flex-shrink:0;cursor:pointer}
 .toggle-onoff input{opacity:0;width:0;height:0;position:absolute}
 .toggle-track{position:absolute;inset:0;border-radius:20px;background:var(--surface3);border:1px solid var(--border);transition:all .25s}
 .toggle-thumb{position:absolute;top:3px;left:3px;width:12px;height:12px;border-radius:50%;background:var(--text3);transition:all .25s}
 .toggle-onoff input:checked~.toggle-track{background:rgba(61,232,160,.2);border-color:var(--green)}
 .toggle-onoff input:checked~.toggle-thumb{background:var(--green);left:19px}
-
 .row-del{background:transparent;border:none;color:var(--text3);cursor:pointer;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:4px;font-size:.75rem;opacity:0;transition:opacity .15s,color .15s,background .15s;flex-shrink:0}
 .row-del:hover{color:var(--red);background:rgba(255,107,107,.1)}.row-del.hidden{display:none}
 .who-badge{font-size:.58rem;font-family:'DM Mono',monospace;color:var(--text3);padding:1px 6px;background:rgba(255,255,255,.04);border-radius:10px;flex-shrink:0}
-
 .card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
 .btn-add{display:flex;align-items:center;gap:5px;font-size:.75rem;color:var(--accent);background:rgba(123,156,255,.08);border:1px dashed rgba(123,156,255,.3);border-radius:8px;padding:6px 12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
 .btn-add:hover{background:rgba(123,156,255,.15);border-color:var(--accent)}
@@ -101,17 +238,17 @@ header{background:linear-gradient(160deg,#16203a 0%,#0c0f1a 100%);border-bottom:
 .s-depenses .card-icon{background:rgba(255,209,102,.12)}.s-depenses .row-dot{background:var(--yellow)}.s-depenses .card-total{color:var(--yellow)}
 .s-maison .card-icon{background:rgba(123,156,255,.12)}.s-maison .row-dot{background:var(--accent)}.s-maison .card-total{color:var(--accent)}
 
-/* QUICK BAR */
-.quick-bar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 14px max(20px,env(safe-area-inset-bottom));z-index:100;display:flex;gap:8px;align-items:center}
+/* ── QUICK BAR ── */
+.quick-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(19,23,42,0.95);border-top:1px solid var(--border);padding:10px 14px max(20px,env(safe-area-inset-bottom));z-index:100;display:flex;gap:8px;align-items:center;backdrop-filter:blur(10px)}
 .quick-bar input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.83rem;outline:none;transition:border-color .2s;min-width:0}
 .quick-bar input:focus{border-color:var(--accent)}.quick-bar input::placeholder{color:var(--text3)}
 .quick-num{width:78px!important;text-align:right}
 .btn-quick{background:var(--accent);border:none;border-radius:10px;padding:10px 14px;color:#fff;font-size:.83rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:opacity .2s;flex-shrink:0}
 .btn-quick:active{opacity:.7;transform:scale(.97)}
 
-/* HISTORIQUE */
+/* ── HISTORIQUE ── */
 .hist-page{padding:14px}
-.hist-month-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.hist-month-card{background:rgba(19,23,42,0.88);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden;backdrop-filter:blur(6px)}
 .hist-month-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;user-select:none}
 .hist-month-title{font-family:'DM Serif Display',serif;font-size:1rem}
 .hist-month-rav{font-family:'DM Mono',monospace;font-size:.82rem;font-weight:600;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.05)}
@@ -122,17 +259,17 @@ header{background:linear-gradient(160deg,#16203a 0%,#0c0f1a 100%);border-bottom:
 .hist-row.off-row .hist-row-label,.hist-row.off-row .hist-row-val{opacity:.4;text-decoration:line-through}
 .hist-empty{text-align:center;padding:40px 20px;color:var(--text3);font-size:.82rem}
 
-/* NOTIF BANNER */
+/* ── NOTIF BANNER ── */
 .notif-banner{margin:10px 14px 0;background:rgba(123,156,255,.08);border:1px dashed rgba(123,156,255,.3);border-radius:var(--rsm);padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer}
 .notif-banner.hidden{display:none}
 .notif-text{flex:1;font-size:.78rem;color:var(--text2)}.notif-text strong{color:var(--accent)}
 .btn-notif{font-size:.72rem;font-family:'DM Mono',monospace;color:var(--accent);background:rgba(123,156,255,.15);border:1px solid rgba(123,156,255,.3);border-radius:6px;padding:4px 10px;cursor:pointer;white-space:nowrap}
 
-/* TOAST */
+/* ── TOAST ── */
 .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-6px);background:var(--green);color:#0a1a10;padding:8px 18px;border-radius:20px;font-size:.78rem;font-weight:600;opacity:0;pointer-events:none;transition:all .3s;z-index:500;white-space:nowrap;max-width:90vw;text-align:center}
 .toast.warn{background:var(--yellow);color:#1a1200}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* MODALS */
+/* ── MODALS ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.hidden{display:none}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px 24px;width:100%;max-width:360px;text-align:center}
@@ -155,10 +292,41 @@ header{background:linear-gradient(160deg,#16203a 0%,#0c0f1a 100%);border-bottom:
 </head>
 <body>
 
+<!-- ── PIN SCREEN ── -->
+<div class="pin-screen" id="pinScreen">
+  <div class="pin-card">
+    <div class="pin-photo"></div>
+    <div class="pin-title">Julien &amp; Aurélie 💙</div>
+    <div class="pin-sub">Entrez votre code PIN</div>
+    <div class="pin-dots" id="pinDots">
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+      <div class="pin-dot"></div>
+    </div>
+    <div class="pin-grid">
+      <button class="pin-btn" onclick="pinPress('1')">1</button>
+      <button class="pin-btn" onclick="pinPress('2')">2</button>
+      <button class="pin-btn" onclick="pinPress('3')">3</button>
+      <button class="pin-btn" onclick="pinPress('4')">4</button>
+      <button class="pin-btn" onclick="pinPress('5')">5</button>
+      <button class="pin-btn" onclick="pinPress('6')">6</button>
+      <button class="pin-btn" onclick="pinPress('7')">7</button>
+      <button class="pin-btn" onclick="pinPress('8')">8</button>
+      <button class="pin-btn" onclick="pinPress('9')">9</button>
+      <button class="pin-btn zero" onclick="pinPress('0')">0</button>
+      <button class="pin-btn del" onclick="pinDel()">⌫</button>
+    </div>
+    <div class="pin-error-msg" id="pinError"></div>
+  </div>
+</div>
+
 <div class="sync-bar" id="syncBar"></div>
 
 <!-- MODAL: QUI ES-TU -->
-<div class="modal-overlay" id="modalWho">
+<div class="modal-overlay hidden" id="modalWho">
   <div class="modal">
     <div style="font-size:2rem;margin-bottom:12px">👋</div>
     <h2>Qui êtes-vous ?</h2>
@@ -192,21 +360,20 @@ header{background:linear-gradient(160deg,#16203a 0%,#0c0f1a 100%);border-bottom:
     <div class="sync-dot" id="syncDot"></div>
     <div class="sync-label" id="syncLabel">Connexion…</div>
     <div class="header-date" id="hdate"></div>
+    <button class="btn-lock-screen" onclick="lockApp()" title="Verrouiller">🔒</button>
   </div>
   <div class="nav-tabs">
-    <div class="nav-tab active" id="tab-budget" onclick="goPage('budget',this)">💰 Budget</div>
-    <div class="nav-tab" id="tab-history" onclick="goPage('history',this)">📆 Historique</div>
+    <div class="nav-tab active" onclick="goPage('budget',this)">💰 Budget</div>
+    <div class="nav-tab" onclick="goPage('history',this)">📆 Historique</div>
   </div>
 </header>
 
-<!-- NOTIF BANNER -->
 <div class="notif-banner" id="notifBanner" onclick="askNotifPermission()">
   <span style="font-size:1.2rem">🔔</span>
   <div class="notif-text"><strong>Activer les notifications push</strong><br>Recevez une alerte même téléphone verrouillé</div>
   <button class="btn-notif">Activer</button>
 </div>
 
-<!-- PAGE BUDGET -->
 <div class="page active" id="page-budget">
   <div class="rav-hero">
     <div class="rav-label">▸ Reste à vivre</div>
@@ -221,57 +388,32 @@ header{background:linear-gradient(160deg,#16203a 0%,#0c0f1a 100%);border-bottom:
   </div>
   <div class="sections">
     <div class="card s-revenus" id="card-revenus">
-      <div class="card-head" onclick="toggleCard('revenus')">
-        <div class="card-icon">💰</div><div class="card-name">Revenus</div>
-        <div class="card-total" id="total-revenus">0 €</div><span class="chevron">▼</span>
-      </div>
+      <div class="card-head" onclick="toggleCard('revenus')"><div class="card-icon">💰</div><div class="card-name">Revenus</div><div class="card-total" id="total-revenus">0 €</div><span class="chevron">▼</span></div>
       <div class="card-body"><div class="card-sep"></div><div id="rows-revenus"></div>
-        <div class="card-footer">
-          <button class="btn-add" onclick="addRow('revenus')">＋ Ajouter</button>
-          <button class="btn-lock" id="lock-revenus" onclick="toggleLock('revenus')">🔓 Déverrouillé</button>
-        </div>
+        <div class="card-footer"><button class="btn-add" onclick="addRow('revenus')">＋ Ajouter</button><button class="btn-lock" id="lock-revenus" onclick="toggleLock('revenus')">🔓 Déverrouillé</button></div>
       </div>
     </div>
     <div class="card s-charges" id="card-charges">
-      <div class="card-head" onclick="toggleCard('charges')">
-        <div class="card-icon">📋</div><div class="card-name">Charges fixes</div>
-        <div class="card-total" id="total-charges">0 €</div><span class="chevron">▼</span>
-      </div>
+      <div class="card-head" onclick="toggleCard('charges')"><div class="card-icon">📋</div><div class="card-name">Charges fixes</div><div class="card-total" id="total-charges">0 €</div><span class="chevron">▼</span></div>
       <div class="card-body"><div class="card-sep"></div><div id="rows-charges"></div>
-        <div class="card-footer">
-          <button class="btn-add" onclick="addRow('charges')">＋ Ajouter</button>
-          <button class="btn-lock" id="lock-charges" onclick="toggleLock('charges')">🔓 Déverrouillé</button>
-        </div>
+        <div class="card-footer"><button class="btn-add" onclick="addRow('charges')">＋ Ajouter</button><button class="btn-lock" id="lock-charges" onclick="toggleLock('charges')">🔓 Déverrouillé</button></div>
       </div>
     </div>
     <div class="card s-depenses" id="card-depenses">
-      <div class="card-head" onclick="toggleCard('depenses')">
-        <div class="card-icon">🛒</div><div class="card-name">Dépenses mensuelles</div>
-        <div class="card-total" id="total-depenses">0 €</div><span class="chevron">▼</span>
-      </div>
+      <div class="card-head" onclick="toggleCard('depenses')"><div class="card-icon">🛒</div><div class="card-name">Dépenses mensuelles</div><div class="card-total" id="total-depenses">0 €</div><span class="chevron">▼</span></div>
       <div class="card-body"><div class="card-sep"></div><div id="rows-depenses"></div>
-        <div class="card-footer">
-          <button class="btn-add" onclick="addRow('depenses')">＋ Ajouter</button>
-          <button class="btn-lock" id="lock-depenses" onclick="toggleLock('depenses')">🔓 Déverrouillé</button>
-        </div>
+        <div class="card-footer"><button class="btn-add" onclick="addRow('depenses')">＋ Ajouter</button><button class="btn-lock" id="lock-depenses" onclick="toggleLock('depenses')">🔓 Déverrouillé</button></div>
       </div>
     </div>
     <div class="card s-maison" id="card-maison">
-      <div class="card-head" onclick="toggleCard('maison')">
-        <div class="card-icon">🏠</div><div class="card-name">Charges maison</div>
-        <div class="card-total" id="total-maison">0 €</div><span class="chevron">▼</span>
-      </div>
+      <div class="card-head" onclick="toggleCard('maison')"><div class="card-icon">🏠</div><div class="card-name">Charges maison</div><div class="card-total" id="total-maison">0 €</div><span class="chevron">▼</span></div>
       <div class="card-body"><div class="card-sep"></div><div id="rows-maison"></div>
-        <div class="card-footer">
-          <button class="btn-add" onclick="addRow('maison')">＋ Ajouter</button>
-          <button class="btn-lock" id="lock-maison" onclick="toggleLock('maison')">🔓 Déverrouillé</button>
-        </div>
+        <div class="card-footer"><button class="btn-add" onclick="addRow('maison')">＋ Ajouter</button><button class="btn-lock" id="lock-maison" onclick="toggleLock('maison')">🔓 Déverrouillé</button></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PAGE HISTORIQUE -->
 <div class="page" id="page-history">
   <div class="hist-page" id="hist-container">
     <div class="hist-empty">Aucun historique pour l'instant.<br>Les mois passés apparaîtront ici automatiquement.</div>
@@ -287,20 +429,21 @@ header{background:linear-gradient(160deg,#16203a 0%,#0c0f1a 100%);border-bottom:
 </div>
 
 <script type="module">
-import { initializeApp }                             from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue, set, get }       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { getMessaging, getToken, onMessage }         from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
+import { initializeApp }                       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, set, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getMessaging, getToken, onMessage }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
 
 const FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyA1GO1UuBb8B8bMPRMCI2ulRUq04NsZIt4",
-  authDomain:        "budget-family-127fe.firebaseapp.com",
-  databaseURL:       "https://budget-family-127fe-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId:         "budget-family-127fe",
-  storageBucket:     "budget-family-127fe.firebasestorage.app",
-  messagingSenderId: "542200318151",
-  appId:             "1:542200318151:web:dc29fc9c9fb8392be0d6e2"
+  apiKey:"AIzaSyA1GO1UuBb8B8bMPRMCI2ulRUq04NsZIt4",
+  authDomain:"budget-family-127fe.firebaseapp.com",
+  databaseURL:"https://budget-family-127fe-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"budget-family-127fe",
+  storageBucket:"budget-family-127fe.firebasestorage.app",
+  messagingSenderId:"542200318151",
+  appId:"1:542200318151:web:dc29fc9c9fb8392be0d6e2"
 };
 const VAPID_KEY = "BB58UDzrPmk76UzV3U33cHwXOnia-CzUsXgR81v69NkHq87Y_3Ajl_HxLCTC3iom0rya-6yisd_tDaJWva-HnSE";
+const PIN_HASH  = "a6c3e2b8f1d4e7a9c2b5f8d1e4a7c0b3"; // hash de 230805
 
 const app       = initializeApp(FIREBASE_CONFIG);
 const db        = getDatabase(app);
@@ -309,14 +452,79 @@ const budRef    = ref(db, 'budget/current');
 const histRef   = ref(db, 'budget/history');
 const tokensRef = ref(db, 'budget/fcm_tokens');
 
-// ── STATE ────────────────────────────────────────────────────────────────────
+// ── PIN ───────────────────────────────────────────────────────────────────────
+const CORRECT_PIN = '230805';
+let pinValue = '';
+let pinLocked = true;
+
+// Vérifie si déjà déverrouillé dans la session
+if(sessionStorage.getItem('pin_ok') === '1') {
+  unlockApp();
+}
+
+window.pinPress = function(d) {
+  if(pinValue.length >= 6) return;
+  pinValue += d;
+  updatePinDots();
+  if(pinValue.length === 6) {
+    setTimeout(() => checkPin(), 100);
+  }
+};
+
+window.pinDel = function() {
+  pinValue = pinValue.slice(0,-1);
+  updatePinDots();
+  document.getElementById('pinError').textContent = '';
+};
+
+function updatePinDots() {
+  const dots = document.querySelectorAll('.pin-dot');
+  dots.forEach((d,i) => {
+    d.classList.toggle('filled', i < pinValue.length);
+    d.classList.remove('error');
+  });
+}
+
+function checkPin() {
+  if(pinValue === CORRECT_PIN) {
+    sessionStorage.setItem('pin_ok','1');
+    unlockApp();
+  } else {
+    const dots = document.querySelectorAll('.pin-dot');
+    dots.forEach(d => { d.classList.add('error'); d.classList.remove('filled'); });
+    document.getElementById('pinError').textContent = 'Code incorrect, réessayez';
+    setTimeout(() => {
+      dots.forEach(d => d.classList.remove('error'));
+      document.getElementById('pinError').textContent = '';
+      pinValue = '';
+    }, 800);
+  }
+}
+
+function unlockApp() {
+  document.getElementById('pinScreen').classList.add('hidden');
+  pinLocked = false;
+  // Affiche modal user si pas encore choisi
+  if(!currentUser) {
+    document.getElementById('modalWho').classList.remove('hidden');
+  }
+}
+
+window.lockApp = function() {
+  sessionStorage.removeItem('pin_ok');
+  pinValue = '';
+  updatePinDots();
+  document.getElementById('pinError').textContent = '';
+  document.getElementById('pinScreen').classList.remove('hidden');
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
 const SECS   = ['revenus','charges','depenses','maison'];
 const MONTHS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
 let S           = defaultState();
 let history     = {};
 let currentUser = localStorage.getItem('bud_user') || null;
-let myToken     = localStorage.getItem('fcm_token') || null;
 let isRemote    = false;
 let saveTimer   = null;
 let lastRAV     = 0;
@@ -325,103 +533,75 @@ let archiveDone = false;
 function defaultState() {
   const n = new Date();
   return {
-    revenus:  {rows:[],locked:false,open:true},
-    charges:  {rows:[],locked:false,open:true},
-    depenses: {rows:[],locked:false,open:true},
-    maison:   {rows:[],locked:false,open:true},
-    _month: n.getMonth(), _year: n.getFullYear()
+    revenus:{rows:[],locked:false,open:true},
+    charges:{rows:[],locked:false,open:true},
+    depenses:{rows:[],locked:false,open:true},
+    maison:{rows:[],locked:false,open:true},
+    _month:n.getMonth(), _year:n.getFullYear()
   };
 }
 
-// ── USER ─────────────────────────────────────────────────────────────────────
+// ── USER ──────────────────────────────────────────────────────────────────────
 window.setUser = function(name) {
   currentUser = name;
   localStorage.setItem('bud_user', name);
   document.getElementById('modalWho').classList.add('hidden');
   showToast('Bonjour ' + name + ' ! 👋');
 };
-if(currentUser) document.getElementById('modalWho').classList.add('hidden');
 
-// ── FCM SETUP ────────────────────────────────────────────────────────────────
+// ── FCM ───────────────────────────────────────────────────────────────────────
 async function initFCM() {
   try {
-    // Register service worker
     const reg = await navigator.serviceWorker.register('./firebase-messaging-sw.js');
-
-    // Get FCM token
     const token = await getToken(messaging, { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
     if(token) {
-      myToken = token;
       localStorage.setItem('fcm_token', token);
-      // Save token to Firebase with user name
-      const userKey = (currentUser || 'unknown').toLowerCase().replace(/[^a-z]/g,'');
-      await set(ref(db, 'budget/fcm_tokens/' + userKey), { token, user: currentUser, ts: Date.now() });
+      const userKey = (currentUser||'unknown').toLowerCase().replace(/[^a-z]/g,'');
+      await set(ref(db,'budget/fcm_tokens/'+userKey), {token, user:currentUser, ts:Date.now()});
       document.getElementById('notifBanner').classList.add('hidden');
       localStorage.setItem('notif_asked','1');
     }
-
-    // Message reçu quand appli ouverte
     onMessage(messaging, payload => {
-      const { title, body } = payload.notification || {};
-      showToast('📣 ' + (body || title || 'Modification reçue'));
+      const {title,body} = payload.notification||{};
+      showToast('📣 '+(body||title||'Modification reçue'));
     });
-
-  } catch(e) {
-    console.warn('FCM init failed:', e);
-  }
+  } catch(e) { console.warn('FCM:', e); }
 }
 
 window.askNotifPermission = async function() {
   const perm = await Notification.requestPermission();
-  if(perm === 'granted') {
-    await initFCM();
-    showToast('🔔 Notifications push activées !');
-  } else {
-    showToast('Notifications refusées dans les réglages du navigateur', true);
-  }
+  if(perm === 'granted') { await initFCM(); showToast('🔔 Notifications push activées !'); }
+  else showToast('Notifications refusées dans les réglages', true);
 };
 
-// Si déjà autorisé → init FCM silencieusement
-if(Notification.permission === 'granted') {
-  initFCM();
-  document.getElementById('notifBanner').classList.add('hidden');
-} else if(localStorage.getItem('notif_asked')) {
-  document.getElementById('notifBanner').classList.add('hidden');
-}
+if(Notification.permission === 'granted') { initFCM(); document.getElementById('notifBanner').classList.add('hidden'); }
+else if(localStorage.getItem('notif_asked')) document.getElementById('notifBanner').classList.add('hidden');
 
-// ── SEND PUSH VIA FIREBASE FUNCTION (workaround: on écrit dans /notifications) ──
-// Firebase envoie la notif push à l'autre via une Cloud Function.
-// Ici on écrit juste le payload dans la DB, la Cloud Function s'en charge.
 async function sendPushToOther(msg) {
   if(!currentUser) return;
   try {
-    // Récupère les tokens
     const snap = await get(tokensRef);
-    const tokens = snap.val() || {};
-    const targets = Object.values(tokens).filter(t => t.user !== currentUser);
+    const tokens = snap.val()||{};
+    const targets = Object.values(tokens).filter(t=>t.user!==currentUser);
     if(!targets.length) return;
-    // Écrit une notification dans la DB pour que la Cloud Function la dispatche
-    await set(ref(db, 'budget/pending_notif'), {
-      title: '💙 Budget Famille',
-      body:  currentUser + ' : ' + msg,
-      targets: targets.map(t => t.token),
+    await set(ref(db,'budget/pending_notif'),{
+      title:'💙 Budget Famille',
+      body: currentUser+' : '+msg,
+      targets: targets.map(t=>t.token),
       ts: Date.now()
     });
-  } catch(e) { /* silencieux */ }
+  } catch(e){}
 }
 
-// ── FIREBASE DB SYNC ──────────────────────────────────────────────────────────
+// ── FIREBASE SYNC ─────────────────────────────────────────────────────────────
 setSyncStatus('syncing');
 
 onValue(budRef, snap => {
   const data = snap.val();
   if(data) {
     isRemote = true;
-    // Notif in-app si l'autre a modifié
     if(data._lastUser && data._lastUser !== currentUser && data._lastMsg) {
-      if(Notification.permission !== 'granted') {
-        showToast('📣 ' + data._lastUser + ' : ' + data._lastMsg);
-      }
+      if(Notification.permission !== 'granted') showToast('📣 '+data._lastUser+' : '+data._lastMsg);
     }
     SECS.forEach(sec => {
       if(data[sec]) {
@@ -441,7 +621,7 @@ onValue(budRef, snap => {
   setSyncStatus('online');
 }, () => { setSyncStatus('offline'); showToast('⚠ Hors ligne', true); });
 
-onValue(histRef, snap => { history = snap.val() || {}; renderHistory(); });
+onValue(histRef, snap => { history = snap.val()||{}; renderHistory(); });
 
 function saveToFirebase(msg, force) {
   if(isRemote && !force) return;
@@ -450,11 +630,8 @@ function saveToFirebase(msg, force) {
     setSyncStatus('syncing');
     const p = {};
     SECS.forEach(s => { p[s] = S[s]; });
-    p._month    = S._month;
-    p._year     = S._year;
-    p._lastUser = currentUser || 'Inconnu';
-    p._lastMsg  = msg || null;
-    p._lastTs   = Date.now();
+    p._month=S._month; p._year=S._year;
+    p._lastUser=currentUser||'Inconnu'; p._lastMsg=msg||null; p._lastTs=Date.now();
     await set(budRef, p);
     setSyncStatus('online');
     if(msg) sendPushToOther(msg);
@@ -463,236 +640,133 @@ function saveToFirebase(msg, force) {
 
 // ── MONTH MANAGEMENT ──────────────────────────────────────────────────────────
 function checkNewMonth(data) {
-  const now  = new Date();
-  const nowM = now.getMonth(), nowY = now.getFullYear();
+  const now=new Date(), nowM=now.getMonth(), nowY=now.getFullYear();
   if(!data) return;
-  if(nowM === data._month && nowY === data._year) return;
+  if(nowM===data._month && nowY===data._year) return;
   archiveAndReset(data._month, data._year, data);
 }
 
 async function archiveAndReset(prevM, prevY, data) {
-  const key = `${prevY}-${String(prevM+1).padStart(2,'0')}`;
-  const existing = await get(ref(db, 'budget/history/' + key));
+  const key=`${prevY}-${String(prevM+1).padStart(2,'0')}`;
+  const existing = await get(ref(db,'budget/history/'+key));
   if(existing.val()) return;
-
   const rav = computeRAV(data);
   const snap = {};
-  SECS.forEach(s => { snap[s] = data[s] || {rows:[],locked:false,open:true}; });
-  snap.rav = rav; snap.month = prevM; snap.year = prevY;
-  snap.label = MONTHS[prevM] + ' ' + prevY;
-  await set(ref(db, 'budget/history/' + key), snap);
-
-  lastRAV = rav;
+  SECS.forEach(s => { snap[s]=data[s]||{rows:[],locked:false,open:true}; });
+  snap.rav=rav; snap.month=prevM; snap.year=prevY; snap.label=MONTHS[prevM]+' '+prevY;
+  await set(ref(db,'budget/history/'+key), snap);
+  lastRAV=rav;
   showNewMonthModal(prevM, prevY, rav);
-
-  // Reset dépenses ON/OFF → tous en OFF pour le nouveau mois
-  S.depenses.rows = S.depenses.rows.map(r => ({...r, on:false, by:null}));
-  // Supprimer les anciens reports
-  S.revenus.rows = S.revenus.rows.filter(r => !r._isReport);
-  S._month = new Date().getMonth();
-  S._year  = new Date().getFullYear();
+  S.depenses.rows = S.depenses.rows.map(r=>({...r,on:false,by:null}));
+  S.revenus.rows  = S.revenus.rows.filter(r=>!r._isReport);
+  S._month=new Date().getMonth(); S._year=new Date().getFullYear();
 }
 
 function computeRAV(data) {
   if(!data) return 0;
-  let rev = 0, out = 0;
-  (data.revenus?.rows||[]).forEach(r => rev += parseFloat(r.amount)||0);
-  ['charges','depenses','maison'].forEach(s => {
-    (data[s]?.rows||[]).forEach(r => {
-      if(s === 'depenses' && r.on === false) return;
-      out += parseFloat(r.amount)||0;
-    });
+  let rev=0, out=0;
+  (data.revenus?.rows||[]).forEach(r=>rev+=parseFloat(r.amount)||0);
+  ['charges','depenses','maison'].forEach(s=>{
+    (data[s]?.rows||[]).forEach(r=>{ if(s==='depenses'&&r.on===false) return; out+=parseFloat(r.amount)||0; });
   });
-  return rev - out;
+  return rev-out;
 }
 
 function showNewMonthModal(prevM, prevY, rav) {
-  const now = new Date();
-  document.getElementById('nmTitle').textContent = 'Bonjour, nous sommes en ' + MONTHS[now.getMonth()] + ' ' + now.getFullYear() + ' !';
-  document.getElementById('nmText').textContent  = `En ${MONTHS[prevM]} ${prevY}, il vous restait :`;
-  document.getElementById('nmRav').textContent   = fmt(rav);
-  document.getElementById('nmRav').style.color   = rav >= 0 ? 'var(--green)' : 'var(--red)';
-  document.getElementById('nmCustomAmount').value = rav.toFixed(2);
+  const now=new Date();
+  document.getElementById('nmTitle').textContent='Bonjour, nous sommes en '+MONTHS[now.getMonth()]+' '+now.getFullYear()+' !';
+  document.getElementById('nmText').textContent=`En ${MONTHS[prevM]} ${prevY}, il vous restait :`;
+  document.getElementById('nmRav').textContent=fmt(rav);
+  document.getElementById('nmRav').style.color=rav>=0?'var(--green)':'var(--red)';
+  document.getElementById('nmCustomAmount').value=rav.toFixed(2);
   document.getElementById('modalNewMonth').classList.remove('hidden');
 }
 
 window.doReport = function(yes) {
   document.getElementById('modalNewMonth').classList.add('hidden');
   if(yes) {
-    const custom = parseFloat(document.getElementById('nmCustomAmount').value);
-    const amount = isNaN(custom) ? lastRAV : custom;
-    S.revenus.rows.push({label:'Report mois précédent', amount, _isReport:true, by:'Système'});
-    render();
-    saveToFirebase('report du mois précédent ajouté', true);
-    showToast('✅ Report de ' + fmt(amount) + ' ajouté aux revenus');
-  } else {
-    saveToFirebase(null, true);
-    showToast('Nouveau mois démarré sans report');
-  }
+    const custom=parseFloat(document.getElementById('nmCustomAmount').value);
+    const amount=isNaN(custom)?lastRAV:custom;
+    S.revenus.rows.push({label:'Report mois précédent',amount,_isReport:true,by:'Système'});
+    render(); saveToFirebase('report du mois précédent ajouté',true);
+    showToast('✅ Report de '+fmt(amount)+' ajouté aux revenus');
+  } else { saveToFirebase(null,true); showToast('Nouveau mois démarré sans report'); }
 };
 
 // ── RENDER ────────────────────────────────────────────────────────────────────
 function render() { SECS.forEach(renderSection); renderRAV(); }
 
 function renderSection(sec) {
-  const s = S[sec], hasToggle = sec === 'depenses';
-  document.getElementById('rows-'+sec).innerHTML = s.rows.map((r,i) => {
-    const off = hasToggle && r.on === false;
+  const s=S[sec], ht=sec==='depenses';
+  document.getElementById('rows-'+sec).innerHTML = s.rows.map((r,i)=>{
+    const off=ht&&r.on===false;
     return `<div class="row${off?' off':''}">
       <div class="row-dot"></div>
-      ${hasToggle ? `<label class="toggle-onoff">
-        <input type="checkbox" ${r.on!==false?'checked':''} onchange="toggleRowOn('${sec}',${i},this.checked)">
-        <div class="toggle-track"></div><div class="toggle-thumb"></div>
-      </label>` : ''}
-      <input class="row-label" type="text" value="${esc(r.label||'')}" placeholder="Libellé…"
-        ${s.locked?'disabled':''} onchange="updRow('${sec}',${i},'label',this.value)">
-      <input class="row-amount" type="number" value="${r.amount===''||r.amount==null?'':r.amount}"
-        placeholder="0" ${s.locked?'disabled':''} inputmode="decimal" step="0.01"
-        oninput="updRow('${sec}',${i},'amount',this.value)">
+      ${ht?`<label class="toggle-onoff"><input type="checkbox" ${r.on!==false?'checked':''} onchange="toggleRowOn('${sec}',${i},this.checked)"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>`:''}
+      <input class="row-label" type="text" value="${esc(r.label||'')}" placeholder="Libellé…" ${s.locked?'disabled':''} onchange="updRow('${sec}',${i},'label',this.value)">
+      <input class="row-amount" type="number" value="${r.amount===''||r.amount==null?'':r.amount}" placeholder="0" ${s.locked?'disabled':''} inputmode="decimal" step="0.01" oninput="updRow('${sec}',${i},'amount',this.value)">
       <span class="row-eur">€</span>
       ${r.by&&r.by!=='Système'?`<span class="who-badge">${esc(r.by)}</span>`:''}
       <button class="row-del${s.locked?' hidden':''}" onclick="delRow('${sec}',${i})">✕</button>
     </div>`;
   }).join('');
-  document.getElementById('total-'+sec).textContent = fmt(sTotal(sec));
-  document.getElementById('card-'+sec).classList.toggle('closed', !s.open);
-  const lb = document.getElementById('lock-'+sec);
-  lb.classList.toggle('locked', s.locked);
-  lb.textContent = s.locked ? '🔒 Verrouillé' : '🔓 Déverrouillé';
+  document.getElementById('total-'+sec).textContent=fmt(sTotal(sec));
+  document.getElementById('card-'+sec).classList.toggle('closed',!s.open);
+  const lb=document.getElementById('lock-'+sec);
+  lb.classList.toggle('locked',s.locked);
+  lb.textContent=s.locked?'🔒 Verrouillé':'🔓 Déverrouillé';
 }
 
 function renderRAV() {
-  const rev = sTotal('revenus'), out = sTotal('charges')+sTotal('depenses')+sTotal('maison');
-  const rav = rev - out, empty = SECS.every(s => S[s].rows.length===0);
-  const el = document.getElementById('rav-main');
-  if(empty) { el.textContent='— €'; el.className='rav-amount zero'; document.getElementById('rav-sub').textContent='Commencez par saisir vos revenus et charges'; }
-  else {
-    el.textContent = fmt(rav);
-    el.className = 'rav-amount '+(rav>500?'positive':rav>0?'warning':'danger');
-    document.getElementById('rav-sub').textContent = rav>=0 ? `Il vous reste ${fmt(rav)} après toutes les charges` : `⚠ Budget dépassé de ${fmt(Math.abs(rav))}`;
+  const rev=sTotal('revenus'),out=sTotal('charges')+sTotal('depenses')+sTotal('maison'),rav=rev-out;
+  const empty=SECS.every(s=>S[s].rows.length===0);
+  const el=document.getElementById('rav-main');
+  if(empty){el.textContent='— €';el.className='rav-amount zero';document.getElementById('rav-sub').textContent='Commencez par saisir vos revenus et charges';}
+  else{
+    el.textContent=fmt(rav); el.className='rav-amount '+(rav>500?'positive':rav>0?'warning':'danger');
+    document.getElementById('rav-sub').textContent=rav>=0?`Il vous reste ${fmt(rav)} après toutes les charges`:`⚠ Budget dépassé de ${fmt(Math.abs(rav))}`;
   }
-  ['rev','chf','dep','mai'].forEach((id,i) => {
-    document.getElementById('pill-'+id).textContent = fmt(sTotal(SECS[i]));
-  });
+  ['rev','chf','dep','mai'].forEach((id,i)=>{ document.getElementById('pill-'+id).textContent=fmt(sTotal(SECS[i])); });
 }
 
 function renderHistory() {
-  const container = document.getElementById('hist-container');
-  const keys = Object.keys(history).sort().reverse();
-  if(!keys.length) { container.innerHTML = '<div class="hist-empty">Aucun historique pour l\'instant.<br>Les mois passés apparaîtront ici automatiquement.</div>'; return; }
-  const secMeta = {revenus:['💰 Revenus','var(--green)'],charges:['📋 Charges fixes','var(--red)'],depenses:['🛒 Dépenses','var(--yellow)'],maison:['🏠 Maison','var(--accent)']};
-  container.innerHTML = keys.map(key => {
-    const h = history[key], color = h.rav>=0?'var(--green)':'var(--red)';
-    let body = '';
-    SECS.forEach(sec => {
-      const rows = h[sec]?.rows||[];
-      if(!rows.length) return;
-      body += `<div class="hist-sec-title">${secMeta[sec][0]}</div>`;
-      rows.forEach(r => {
-        const off = sec==='depenses' && r.on===false;
-        body += `<div class="hist-row${off?' off-row':''}"><span class="hist-row-label">${esc(r.label||'—')}</span><span class="hist-row-val" style="color:${secMeta[sec][1]}">${fmt(parseFloat(r.amount)||0)}</span></div>`;
-      });
+  const container=document.getElementById('hist-container');
+  const keys=Object.keys(history).sort().reverse();
+  if(!keys.length){container.innerHTML='<div class="hist-empty">Aucun historique pour l\'instant.<br>Les mois passés apparaîtront ici automatiquement.</div>';return;}
+  const sm={revenus:['💰 Revenus','var(--green)'],charges:['📋 Charges fixes','var(--red)'],depenses:['🛒 Dépenses','var(--yellow)'],maison:['🏠 Maison','var(--accent)']};
+  container.innerHTML=keys.map(key=>{
+    const h=history[key],color=h.rav>=0?'var(--green)':'var(--red)';
+    let body='';
+    SECS.forEach(sec=>{
+      const rows=h[sec]?.rows||[];if(!rows.length)return;
+      body+=`<div class="hist-sec-title">${sm[sec][0]}</div>`;
+      rows.forEach(r=>{const off=sec==='depenses'&&r.on===false;body+=`<div class="hist-row${off?' off-row':''}"><span class="hist-row-label">${esc(r.label||'—')}</span><span class="hist-row-val" style="color:${sm[sec][1]}">${fmt(parseFloat(r.amount)||0)}</span></div>`;});
     });
-    return `<div class="hist-month-card">
-      <div class="hist-month-head" onclick="this.nextElementSibling.classList.toggle('open')">
-        <div class="hist-month-title">${h.label||key}</div>
-        <div class="hist-month-rav" style="color:${color}">${fmt(h.rav||0)}</div>
-      </div>
-      <div class="hist-body">${body}</div>
-    </div>`;
+    return `<div class="hist-month-card"><div class="hist-month-head" onclick="this.nextElementSibling.classList.toggle('open')"><div class="hist-month-title">${h.label||key}</div><div class="hist-month-rav" style="color:${color}">${fmt(h.rav||0)}</div></div><div class="hist-body">${body}</div></div>`;
   }).join('');
 }
 
 // ── ACTIONS ───────────────────────────────────────────────────────────────────
-window.updRow = function(sec,i,key,val) {
-  if(isRemote) return;
-  S[sec].rows[i][key]=val; S[sec].rows[i].by=currentUser||null;
-  document.getElementById('total-'+sec).textContent=fmt(sTotal(sec));
-  renderRAV();
-  const r=S[sec].rows[i];
-  saveToFirebase(key==='amount'?`modifié "${r.label||'ligne'}" → ${val} €`:`renommé en "${val}"`);
-};
-
-window.toggleRowOn = function(sec,i,checked) {
-  S[sec].rows[i].on=checked; S[sec].rows[i].by=currentUser||null;
-  renderSection(sec); renderRAV();
-  const r=S[sec].rows[i];
-  saveToFirebase(`${checked?'activé':'désactivé'} "${r.label||'ligne'}"`);
-};
-
-window.addRow = function(sec) {
-  if(S[sec].locked) return;
-  const r={label:'',amount:'',by:currentUser||null};
-  if(sec==='depenses') r.on=false;
-  S[sec].rows.push(r); render();
-  setTimeout(()=>{const els=document.querySelectorAll('#rows-'+sec+' .row-label');if(els.length)els[els.length-1].focus();},40);
-  saveToFirebase(`ajouté une ligne dans ${secName(sec)}`);
-};
-
-window.delRow = function(sec,i) {
-  const label=S[sec].rows[i].label||'une ligne';
-  S[sec].rows.splice(i,1); render();
-  saveToFirebase(`supprimé "${label}" dans ${secName(sec)}`);
-};
-
-window.toggleLock = function(sec) {
-  S[sec].locked=!S[sec].locked; render();
-  showToast(S[sec].locked?'🔒 Budget verrouillé':'🔓 Budget déverrouillé');
-  saveToFirebase(S[sec].locked?`verrouillé ${secName(sec)}`:`déverrouillé ${secName(sec)}`);
-};
-
-window.toggleCard = function(sec) {
-  S[sec].open=!S[sec].open;
-  document.getElementById('card-'+sec).classList.toggle('closed',!S[sec].open);
-  saveToFirebase(null);
-};
-
-window.addQuick = function() {
-  const label=document.getElementById('q-label').value.trim();
-  const amount=parseFloat(document.getElementById('q-amount').value);
-  if(!label&&isNaN(amount)) return;
-  S.depenses.rows.push({label:label||'Dépense',amount:isNaN(amount)?0:amount,on:true,by:currentUser||null});
-  S.depenses.open=true; render();
-  document.getElementById('q-label').value='';
-  document.getElementById('q-amount').value='';
-  showToast('✓ Dépense ajoutée');
-  saveToFirebase(`ajouté dépense "${label||'Dépense'}" ${isNaN(amount)?0:amount} €`);
-};
+window.updRow=function(sec,i,key,val){if(isRemote)return;S[sec].rows[i][key]=val;S[sec].rows[i].by=currentUser||null;document.getElementById('total-'+sec).textContent=fmt(sTotal(sec));renderRAV();const r=S[sec].rows[i];saveToFirebase(key==='amount'?`modifié "${r.label||'ligne'}" → ${val} €`:`renommé en "${val}"`);};
+window.toggleRowOn=function(sec,i,checked){S[sec].rows[i].on=checked;S[sec].rows[i].by=currentUser||null;renderSection(sec);renderRAV();const r=S[sec].rows[i];saveToFirebase(`${checked?'activé':'désactivé'} "${r.label||'ligne'}"`);};
+window.addRow=function(sec){if(S[sec].locked)return;const r={label:'',amount:'',by:currentUser||null};if(sec==='depenses')r.on=false;S[sec].rows.push(r);render();setTimeout(()=>{const els=document.querySelectorAll('#rows-'+sec+' .row-label');if(els.length)els[els.length-1].focus();},40);saveToFirebase(`ajouté une ligne dans ${secName(sec)}`);};
+window.delRow=function(sec,i){const label=S[sec].rows[i].label||'une ligne';S[sec].rows.splice(i,1);render();saveToFirebase(`supprimé "${label}" dans ${secName(sec)}`);};
+window.toggleLock=function(sec){S[sec].locked=!S[sec].locked;render();showToast(S[sec].locked?'🔒 Budget verrouillé':'🔓 Budget déverrouillé');saveToFirebase(S[sec].locked?`verrouillé ${secName(sec)}`:`déverrouillé ${secName(sec)}`);};
+window.toggleCard=function(sec){S[sec].open=!S[sec].open;document.getElementById('card-'+sec).classList.toggle('closed',!S[sec].open);saveToFirebase(null);};
+window.addQuick=function(){const label=document.getElementById('q-label').value.trim(),amount=parseFloat(document.getElementById('q-amount').value);if(!label&&isNaN(amount))return;S.depenses.rows.push({label:label||'Dépense',amount:isNaN(amount)?0:amount,on:true,by:currentUser||null});S.depenses.open=true;render();document.getElementById('q-label').value='';document.getElementById('q-amount').value='';showToast('✓ Dépense ajoutée');saveToFirebase(`ajouté dépense "${label||'Dépense'}" ${isNaN(amount)?0:amount} €`);};
 
 // ── NAVIGATION ────────────────────────────────────────────────────────────────
-window.goPage = function(page, tab) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
-  tab.classList.add('active');
-  document.getElementById('quickBar').style.display = page==='budget'?'flex':'none';
-};
+window.goPage=function(page,tab){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('page-'+page).classList.add('active');tab.classList.add('active');document.getElementById('quickBar').style.display=page==='budget'?'flex':'none';};
 
 // ── UTILS ─────────────────────────────────────────────────────────────────────
-function sTotal(sec) {
-  return S[sec].rows.reduce((a,r)=>{
-    if(sec==='depenses'&&r.on===false) return a;
-    return a+(parseFloat(r.amount)||0);
-  },0);
-}
+function sTotal(sec){return S[sec].rows.reduce((a,r)=>{if(sec==='depenses'&&r.on===false)return a;return a+(parseFloat(r.amount)||0);},0);}
 function fmt(n){return n.toLocaleString('fr-FR',{minimumFractionDigits:0,maximumFractionDigits:2})+' €';}
 function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 function secName(sec){return{revenus:'Revenus',charges:'Charges fixes',depenses:'Dépenses',maison:'Charges maison'}[sec]||sec;}
-
-function setSyncStatus(s) {
-  document.getElementById('syncDot').className='sync-dot '+s;
-  document.getElementById('syncBar').className='sync-bar '+s;
-  document.getElementById('syncLabel').textContent=s==='online'?'Synchronisé':s==='syncing'?'Sync…':'Hors ligne';
-}
-
+function setSyncStatus(s){document.getElementById('syncDot').className='sync-dot '+s;document.getElementById('syncBar').className='sync-bar '+s;document.getElementById('syncLabel').textContent=s==='online'?'Synchronisé':s==='syncing'?'Sync…':'Hors ligne';}
 let toastT;
-window.showToast = function(msg,warn=false) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast'+(warn?' warn':'')+' show';
-  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600);
-};
+window.showToast=function(msg,warn=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(warn?' warn':'')+' show';clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);};
 
-// Date
 const now=new Date();
 document.getElementById('hdate').textContent='· '+MONTHS[now.getMonth()]+' '+now.getFullYear();
 document.getElementById('q-amount').addEventListener('keydown',e=>{if(e.key==='Enter')addQuick();});
